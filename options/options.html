@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="color-scheme" content="dark light" />
+	</head>
+
+	<body>
+		<form>
+			<label for="otrasWebs">Eliminar artículos de otras webs (sí/no)</label>
+			<input type="checkbox" id="otrasWebs" name="otrasWebs">
+			<br><br>
+			<label for="patrocinados">Eliminar artículos patrocinados por marcas (sí/no)</label>
+			<input type="checkbox" id="patrocinados" name="patrocinados">
+			<br><br>
+			<label for="webName">Lista de webs a comprobar</label><br>
+			<textarea id="webName" name="webName" rows="10" cols="30"></textarea>
+			<br>
+			<label for="userName">Lista de usuarios a bloquear</label><br>
+			<textarea id="userName" name="userName" rows="10" cols="30"></textarea>
+			<br>
+			<button type="submit">Guardar</button>
+		</form>
+		<script src="options.js"></script>
+	</body>
+</html>
+
+
