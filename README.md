@@ -14,8 +14,15 @@ Rellena en la "Lista de webs a comprobar" los sitios que quieres que se controle
 - www.genbeta.com
 - 3djuegos.com
 
+Se recomienda usar el botón que aparece en los comentarios para añadir automáticamente al usuario.
+
 Rellena la "Lista de usuarios a bloquear" con los usuarios, uno por línea.
 Los nombres con espacios se ponen en una única línea:
 - nombre
 - nombre con espacios
 - otro nombre
+
+Marca la opción de "Mostrar botón bloqueo tema" si quieres que aparezca un botón al lado de las secciones de los artículos, no se muestra en 3djuegos.com.
+
+Rellena la "Lista de temas a bloquear" con la web y el tema.
+- vidaextra.com|cómics

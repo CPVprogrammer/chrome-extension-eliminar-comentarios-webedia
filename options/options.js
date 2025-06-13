@@ -9,22 +9,22 @@
 		}
 	});
 
-	txtArea.value = arrayTemporal.join('\n');
+	return (arrayTemporal);
 }
 
 
 async function saveOptions(e){
 	e.preventDefault();
 
-	eliminarVaciosTxtArea("#webName");
-	eliminarVaciosTxtArea("#userName");
-
-	await chrome.storage.sync.set({
-		otrasWebs: document.querySelector("#otrasWebs").checked,
-		patrocinados: document.querySelector("#patrocinados").checked,
-		webName: document.querySelector("#webName").value,
-		userName: document.querySelector("#userName").value
-	});
+	let datos={};
+	datos.otrasWebs = document.querySelector("#otrasWebs").checked;
+	datos.patrocinados = document.querySelector("#patrocinados").checked;
+	datos.webName = eliminarVaciosTxtArea("#webName");
+	datos.userName = eliminarVaciosTxtArea("#userName");
+	datos.mostrarBloqueoTema = document.querySelector("#mostrarBloqueoTema").checked;
+	datos.temas = eliminarVaciosTxtArea("#temas");
+	
+	await saveOptionsStorage(datos);
 
 	window.close();
 }
@@ -34,19 +34,16 @@ async function loadOptions(){
 	function setDatosOptions(datos) {
 		document.querySelector("#otrasWebs").checked = datos.otrasWebs;
 		document.querySelector("#patrocinados").checked = datos.patrocinados;
-		document.querySelector("#webName").value = datos.webName || "";
-		document.querySelector("#userName").value = datos.userName || "";
+		document.querySelector("#webName").value = datos.webName?.join('\n') || "";
+		document.querySelector("#userName").value = datos.userName?.join('\n') || "";
+		document.querySelector("#mostrarBloqueoTema").checked = datos.mostrarBloqueoTema;
+		document.querySelector("#temas").value = datos.temas?.join('\n') || "";
 	}
 
-	let datos = await chrome.storage.sync.get().catch((err) => {
-		console.error(err);
-		console.log('Fallo al obtener los datos de storage sync.');
-		throw err;
-	});	
+	const datos = await loadOptionsStorage();
 
 	setDatosOptions(datos);
 }
-
 
 document.addEventListener("DOMContentLoaded", loadOptions);
 document.querySelector("form").addEventListener("submit", saveOptions);
