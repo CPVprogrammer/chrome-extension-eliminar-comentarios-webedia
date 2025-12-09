@@ -25,11 +25,12 @@ function botonBloqueoUsuario(datos, currentLocation, nombresWebs, nombresUsuario
 	img_symbol_usuario.style.cssText = "margin-left: 5px; width: 2.1em; cursor: pointer;";
 
 	posicion[0].appendChild(img_symbol_usuario);
-	
+
 	img_symbol_usuario.addEventListener("click", (event) => {
 		const currentTarget = event.currentTarget;
-		
-		if (confirm("¿bloquear al usuario: "+ bloquearUsuario +" en: "+ currentLocation +"?") == true){
+		const [nombreApodo, nombreReal] = bloquearUsuario.split("|");
+
+		if (confirm(`¿bloquear al usuario: ${nombreApodo} (${nombreReal}) en: ${currentLocation}?`) == true){
 
 			//comprobar si está la web
 			if (!nombresWebs.includes(currentLocation)){
@@ -64,7 +65,7 @@ function botonBloqueoTema(datos, todosTemas, currentLocation){
 			const currentTarget = event.currentTarget;
 			const tema = currentTarget.nextElementSibling.innerHTML.trim().toLowerCase();
 			
-			if (confirm("¿bloquear el tema: "+ tema +" en: "+ currentLocation +"?") == true){
+			if (confirm(`¿bloquear el tema: ${tema} en: ${currentLocation}?`) == true){
 				todosTemas.push(currentLocation +"|"+ tema);
 				datos.temas = todosTemas;
 
@@ -167,9 +168,11 @@ async function modificarWeb(){
 	//artículos
 	else{
 		//poner el botón de bloquear usuario
-		lista_enlace_comentarios.forEach(lista_enlace_comentarios => {
-			const bloquearUsuario = lista_enlace_comentarios.innerHTML.trim().toLowerCase();
-			const posicion = lista_enlace_comentarios.closest("ul > li").querySelectorAll("div.comment-actions > ul > li.comment-actions-abuse");
+		lista_enlace_comentarios.forEach(lista_enlace_comentarios_href => {
+			const nombreReal = lista_enlace_comentarios_href.getAttribute("href").replace("#usuario/", "")
+			const nombreApodo = lista_enlace_comentarios_href.innerHTML.trim().toLowerCase();
+			const bloquearUsuario = `${nombreApodo}|${nombreReal}`;
+			const posicion = lista_enlace_comentarios_href.closest("ul > li").querySelectorAll("div.comment-actions > ul > li.comment-actions-abuse");
 			
 			botonBloqueoUsuario(datos, currentLocation, nombresWebs, nombresUsuarios, bloquearUsuario, posicion);
 		});
@@ -205,19 +208,29 @@ async function modificarWeb(){
 
 		//artículos
 		else{
-			lista_enlace_comentarios.forEach(lista_enlace_comentarios => {
-				const nombreUsuario = lista_enlace_comentarios.innerHTML.trim().toLowerCase();
+			lista_enlace_comentarios.forEach(lista_enlace_comentarios_href => {
+				const nombreReal = lista_enlace_comentarios_href.getAttribute("href").replace("#usuario/", "")
+				const nombreApodo = lista_enlace_comentarios_href.innerHTML.trim().toLowerCase();
+				const nombreUsuario = `${nombreApodo}|${nombreReal}`;
 
-				if (nombresUsuarios.includes(nombreUsuario)){
-					lista_enlace_comentarios.closest("ul > li")?.remove();
+				if (nombresUsuarios.some(usuario => {
+					const [apodo, real] = usuario.split("|");
+					return real === nombreReal || apodo === nombreApodo;
+				})) {
+					lista_enlace_comentarios_href.closest("ul > li")?.remove();
 				}
 			});
 			
-			lista_respuestas_comentarios.forEach(lista_respuestas_comentarios => {
-				const nombreUsuario = lista_respuestas_comentarios.innerHTML.trim().toLowerCase();
+			lista_respuestas_comentarios.forEach(lista_enlace_comentarios_href => {
+				const nombreReal = lista_enlace_comentarios_href.getAttribute("href").replace("#usuario/", "")
+				const nombreApodo = lista_enlace_comentarios_href.innerHTML.trim().toLowerCase();
+				const nombreUsuario = `${nombreApodo}|${nombreReal}`;
 
-				if (nombresUsuarios.includes(nombreUsuario)){
-					lista_respuestas_comentarios.closest("ul > li")?.remove();
+				if (nombresUsuarios.some(usuario => {
+					const [apodo, real] = usuario.split("|");
+					return real === nombreReal || apodo === nombreApodo;
+				})) {
+					lista_enlace_comentarios_href.closest("ul > li")?.remove();
 				}
 			});
 		}
